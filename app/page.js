@@ -94,7 +94,7 @@ const GHABSAVault = () => {
               <Search className="text-blue-500 shrink-0" />
               <div>
                 <h4 className="font-bold">Other University Resources</h4>
-                <p className="text-sm text-slate-500">University & SRC Resources</p>
+                <p className="text-sm text-slate-500">University & Student Resources</p>
               </div>
             </div>
           </div>
