@@ -1,5 +1,4 @@
 "use client";
-
 import './globals.css';
 import React, { useState, useEffect } from 'react';
 import { Search, Moon, Sun, Folder, Microscope, Award, BookOpen, Loader2 } from 'lucide-react';
