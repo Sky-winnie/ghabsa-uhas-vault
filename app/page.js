@@ -2,23 +2,19 @@
 
 import './globals.css';
 import React, { useState, useEffect } from 'react';
-import { Search, Moon, Sun, Folder, BookOpen, Microscope, GraduationCap, Loader2, Waves } from 'lucide-react';
+import { Search, Moon, Sun, Folder, Microscope, Award, BookOpen, Loader2 } from 'lucide-react';
 
 export default function GHABSAVault() {
   const [darkMode, setDarkMode] = useState(true);
   const [folders, setFolders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
 
-  // Fetch Live Folders from Google Drive API
   useEffect(() => {
     async function fetchFolders() {
       try {
         const response = await fetch('/api/drive');
         const data = await response.json();
-        if (!data.error) {
-          setFolders(data);
-        }
+        if (!data.error) setFolders(data);
       } catch (err) {
         console.error("Failed to load folders");
       } finally {
@@ -27,18 +23,6 @@ export default function GHABSAVault() {
     }
     fetchFolders();
   }, []);
-
-  // Filter folders based on your search bar input
-  const filteredFolders = folders.filter(f => 
-    f.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  
-  const levels = [
-    { id: 100, title: 'Level 100', courses: 'General Sciences, Math, Intro to BMB', color: 'from-green-600 to-green-800' },
-    { id: 200, title: 'Level 200', courses: 'Organic Chemistry, Genetics, Metabolism', color: 'from-green-500 to-green-700' },
-    { id: 300, title: 'Level 300', courses: 'Molecular Biology, Cell Signaling, Enzymology', color: 'from-yellow-500 to-yellow-600' },
-    { id: 400, title: 'Level 400', courses: 'Clinical Biochem, Immunology, Research Methods', color: 'from-green-800 to-black' },
-  ];
 
   return (
     <div className={`${darkMode ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900'} min-h-screen font-sans transition-colors duration-300`}>
