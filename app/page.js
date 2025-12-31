@@ -1,10 +1,37 @@
 "use client";
-import './globals.css';
-import React, { useState } from 'react';
-import { Search, Moon, Sun, Folder, BookOpen, Microscope, Award, Upload } from 'lucide-react';
 
-const GHABSAVault = () => {
+import './globals.css';
+import React, { useState, useEffect } from 'react';
+import { Search, Moon, Sun, Folder, BookOpen, Microscope, GraduationCap, Loader2, Waves } from 'lucide-react';
+
+export default function GHABSAVault() {
   const [darkMode, setDarkMode] = useState(true);
+  const [folders, setFolders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Fetch Live Folders from Google Drive API
+  useEffect(() => {
+    async function fetchFolders() {
+      try {
+        const response = await fetch('/api/drive');
+        const data = await response.json();
+        if (!data.error) {
+          setFolders(data);
+        }
+      } catch (err) {
+        console.error("Failed to load folders");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchFolders();
+  }, []);
+
+  // Filter folders based on your search bar input
+  const filteredFolders = folders.filter(f => 
+    f.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   
   const levels = [
     { id: 100, title: 'Level 100', courses: 'General Sciences, Math, Intro to BMB', color: 'from-green-600 to-green-800' },
