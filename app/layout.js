@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "GHABSA-UHAS Vault | BMB Resources",
-  description: "Official repository for BMB students at UHAS",
+  title: "GHABSA-UHAS Digital Vault",
+  description: "Resource Repository for Biochrmistry and Molecular Biology students",
   icons: {
     icon: [
       { url: "/logo.png" },
