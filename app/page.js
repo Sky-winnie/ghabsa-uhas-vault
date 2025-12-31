@@ -58,8 +58,13 @@ const GHABSAVault = () => {
               <ArrowLeft size={20} />
             </button>
           )}
+          <img 
+            src="/logo.png" 
+            alt="GHABSA Crest" 
+            className="w-12 h-12 object-contain" 
+          />
           <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center font-bold text-white shadow-lg">BMB</div>
-          <span className="font-bold text-xl tracking-tight hidden sm:block uppercase">GHABSA-UHAS <span className="text-green-500">Vault</span></span>
+          <span className="font-bold text-xl tracking-tight hidden sm:block uppercase">GHABSA-UHAS <span className="text-green-500">Digital Vault</span></span>
         </div>
         <div className="flex items-center gap-4">
           <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-full hover:bg-slate-800 transition-colors">
