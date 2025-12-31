@@ -2,7 +2,7 @@
 
 import './globals.css';
 import React, { useState } from 'react';
-import { Search, Moon, Sun, Folder, BookOpen, Microscope, Award, Upload, ArrowLeft, FileText, Loader2, ExternalLink, FileJson, FileCode } from 'lucide-react';
+import { Search, Moon, Sun, Folder, BookOpen, Microscope, Award, Upload, ArrowLeft, FileText, Loader2, ExternalLink, FileJson, FileCode, Clock } from 'lucide-react';
 
 const GHABSAVault = () => {
   const [darkMode, setDarkMode] = useState(true);
@@ -18,30 +18,31 @@ const GHABSAVault = () => {
     { id: '400', title: 'Level 400', courses: 'Clinical Biochem, Immunology, Research Methods', color: 'from-green-800 to-black' },
   ];
 
-  // Logic to fetch items from Drive
   const handleFolderClick = async (searchKey) => {
     setCurrentFolder(searchKey);
     setLoading(true);
-    setFiles([]); // Clear old files to prevent mapping errors
+    setFiles([]); 
     try {
       const response = await fetch(`/api/drive?folderName=${encodeURIComponent(searchKey)}`);
       const data = await response.json();
-      // Guard against non-array data
       setFiles(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error("Fetch error:", err);
       setFiles([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // Helper to get file-specific icons
   const getFileIcon = (mimeType) => {
-    if (mimeType?.includes('pdf')) return <FileText className="text-red-400" />;
-    if (mimeType?.includes('word') || mimeType?.includes('document')) return <BookOpen className="text-blue-400" />;
-    if (mimeType?.includes('spreadsheet') || mimeType?.includes('excel')) return <FileJson className="text-green-400" />;
-    return <FileCode className="text-slate-400" />;
+    if (mimeType?.includes('pdf')) return <FileText className="text-red-400" size={24} />;
+    if (mimeType?.includes('word') || mimeType?.includes('document')) return <BookOpen className="text-blue-400" size={24} />;
+    if (mimeType?.includes('spreadsheet') || mimeType?.includes('excel')) return <FileJson className="text-green-400" size={24} />;
+    return <FileCode className="text-slate-400" size={24} />;
+  };
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
   const filteredItems = currentFolder 
@@ -50,7 +51,6 @@ const GHABSAVault = () => {
 
   return (
     <div className={`${darkMode ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900'} min-h-screen font-sans transition-colors duration-300`}>
-      {/* Navigation */}
       <nav className="flex items-center justify-between p-6 max-w-7xl mx-auto backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center gap-2">
           {currentFolder && (
@@ -61,12 +61,11 @@ const GHABSAVault = () => {
           <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center font-bold text-white shadow-lg">BMB</div>
           <span className="font-bold text-xl tracking-tight hidden sm:block uppercase">GHABSA-UHAS <span className="text-green-500">Vault</span></span>
         </div>
-        
         <div className="flex items-center gap-4">
           <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-full hover:bg-slate-800 transition-colors">
             {darkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
-          <a href="YOUR_GOOGLE_FORM_LINK" target="_blank" rel="noopener noreferrer" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2 shadow-lg">
+          <a href="https://forms.gle/your-link" target="_blank" rel="noopener noreferrer" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2 shadow-lg">
             <Upload size={16} /> Contribute
           </a>
         </div>
@@ -74,7 +73,7 @@ const GHABSAVault = () => {
 
       <header className="max-w-7xl mx-auto px-6 py-12 text-center">
         <h1 className="text-4xl md:text-6xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-yellow-500">
-          {currentFolder ? `${currentFolder} Resources` : 'Health for Development.'}
+          {currentFolder ? `${currentFolder} Shelf` : 'Health for Development.'}
         </h1>
         <div className="relative max-w-xl mx-auto mt-8">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={20} />
@@ -105,24 +104,18 @@ const GHABSAVault = () => {
             <section className="mt-16 border-t border-white/5 pt-16">
               <h2 className="text-2xl font-bold mb-8 flex items-center gap-2"><Microscope className="text-green-500" /> Specialist Resources</h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                {/* Updated Specialist Buttons to match your Drive names */}
-<div onClick={() => handleFolderClick('Internship')} className="...">
-  {/* This will find "05_Internship_Hub" because it contains "Internship" */}
-  <Award className="text-yellow-500 shrink-0" />
-  <div><h4 className="font-bold">Internship Hub</h4><p className="text-sm text-slate-500">Logbooks & Guides</p></div>
-</div>
-
-<div onClick={() => handleFolderClick('SOP')} className="...">
-  {/* This will find "06_Lab_SOPs" because it contains "SOP" */}
-  <BookOpen className="text-green-500 shrink-0" />
-  <div><h4 className="font-bold">Lab SOPs</h4><p className="text-sm text-slate-500">Standard Procedures</p></div>
-</div>
-
-<div onClick={() => handleFolderClick('Other')} className="...">
-  {/* This will find "08_Other-University_Resources" */}
-  <Search className="text-blue-500 shrink-0" />
-  <div><h4 className="font-bold">General Courses</h4><p className="text-sm text-slate-500">UHAS Requirements</p></div>
-</div>
+                <div onClick={() => handleFolderClick('Internship')} className={`p-6 rounded-2xl flex items-start gap-4 cursor-pointer transition-all ${darkMode ? 'bg-slate-900 hover:bg-slate-800' : 'bg-white shadow-sm hover:shadow-md'}`}>
+                  <Award className="text-yellow-500 shrink-0" />
+                  <div><h4 className="font-bold">Internship Hub</h4><p className="text-sm text-slate-500">Logbooks & Guides</p></div>
+                </div>
+                <div onClick={() => handleFolderClick('SOP')} className={`p-6 rounded-2xl flex items-start gap-4 cursor-pointer transition-all ${darkMode ? 'bg-slate-900 hover:bg-slate-800' : 'bg-white shadow-sm hover:shadow-md'}`}>
+                  <BookOpen className="text-green-500 shrink-0" />
+                  <div><h4 className="font-bold">Lab SOPs</h4><p className="text-sm text-slate-500">Standard Procedures</p></div>
+                </div>
+                <div onClick={() => handleFolderClick('Other')} className={`p-6 rounded-2xl flex items-start gap-4 cursor-pointer transition-all ${darkMode ? 'bg-slate-900 hover:bg-slate-800' : 'bg-white shadow-sm hover:shadow-md'}`}>
+                  <Search className="text-blue-500 shrink-0" />
+                  <div><h4 className="font-bold">General Courses</h4><p className="text-sm text-slate-500">UHAS Requirements</p></div>
+                </div>
               </div>
             </section>
           </>
@@ -131,15 +124,20 @@ const GHABSAVault = () => {
             {loading ? (
               <div className="flex flex-col items-center justify-center py-20 gap-4">
                 <Loader2 className="animate-spin text-green-500" size={40} />
-                <p className="text-slate-500">Opening the Vault...</p>
+                <p className="text-slate-500">Unlocking the vault...</p>
               </div>
             ) : filteredItems.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 {filteredItems.map((file) => (
-                  <a key={file.id} href={file.webViewLink} target="_blank" className="flex items-center justify-between p-5 bg-white/5 rounded-2xl hover:bg-green-500/10 border border-white/10 hover:border-green-500/50 transition-all group">
+                  <a key={file.id} href={file.webViewLink} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-5 bg-white/5 rounded-2xl hover:bg-green-500/10 border border-white/10 hover:border-green-500/50 transition-all group">
                     <div className="flex items-center gap-4">
                       {getFileIcon(file.mimeType)}
-                      <span className="font-medium truncate max-w-[200px] md:max-w-xs">{file.name}</span>
+                      <div className="flex flex-col">
+                        <span className="font-medium truncate max-w-[200px] md:max-w-xl">{file.name}</span>
+                        <span className="text-xs text-slate-500 flex items-center gap-1 mt-1">
+                          <Clock size={12} /> Updated: {formatDate(file.modifiedTime)}
+                        </span>
+                      </div>
                     </div>
                     <ExternalLink size={18} className="opacity-0 group-hover:opacity-100 transition-all text-green-500" />
                   </a>
