@@ -1,5 +1,7 @@
 "use client";
 
+import './globals.css';
+
 import React, { useState } from 'react';
 import { Search, Moon, Sun, Folder, BookOpen, Microscope, Award, Upload } from 'lucide-react';
 
