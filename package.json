@@ -8,17 +8,17 @@
     "start": "next start"
   },
   "dependencies": {
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest",
-    "googleapis": "^126.0.0",
+    "next": "15.1.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "googleapis": "^144.0.0",
     "lucide-react": "latest",
     "clsx": "latest",
     "tailwind-merge": "latest"
   },
   "devDependencies": {
-    "autoprefixer": "latest",
-    "postcss": "latest",
-    "tailwindcss": "latest"
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.16",
+    "autoprefixer": "^10.4.20"
   }
 }
