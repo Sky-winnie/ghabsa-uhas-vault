@@ -105,19 +105,24 @@ const GHABSAVault = () => {
             <section className="mt-16 border-t border-white/5 pt-16">
               <h2 className="text-2xl font-bold mb-8 flex items-center gap-2"><Microscope className="text-green-500" /> Specialist Resources</h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                {/* Fixed Specialist Buttons */}
-                <div onClick={() => handleFolderClick('Internship')} className={`p-6 rounded-2xl flex items-start gap-4 cursor-pointer transition-all ${darkMode ? 'bg-slate-900 hover:bg-slate-800' : 'bg-white shadow-sm hover:shadow-md'}`}>
-                  <Award className="text-yellow-500 shrink-0" />
-                  <div><h4 className="font-bold">Internship Hub</h4><p className="text-sm text-slate-500">Logbooks & Guides</p></div>
-                </div>
-                <div onClick={() => handleFolderClick('SOP')} className={`p-6 rounded-2xl flex items-start gap-4 cursor-pointer transition-all ${darkMode ? 'bg-slate-900 hover:bg-slate-800' : 'bg-white shadow-sm hover:shadow-md'}`}>
-                  <BookOpen className="text-green-500 shrink-0" />
-                  <div><h4 className="font-bold">Lab SOPs</h4><p className="text-sm text-slate-500">Standard Procedures</p></div>
-                </div>
-                <div onClick={() => handleFolderClick('General')} className={`p-6 rounded-2xl flex items-start gap-4 cursor-pointer transition-all ${darkMode ? 'bg-slate-900 hover:bg-slate-800' : 'bg-white shadow-sm hover:shadow-md'}`}>
-                  <Search className="text-blue-500 shrink-0" />
-                  <div><h4 className="font-bold">General Courses</h4><p className="text-sm text-slate-500">UHAS Requirements</p></div>
-                </div>
+                {/* Updated Specialist Buttons to match your Drive names */}
+<div onClick={() => handleFolderClick('Internship')} className="...">
+  {/* This will find "05_Internship_Hub" because it contains "Internship" */}
+  <Award className="text-yellow-500 shrink-0" />
+  <div><h4 className="font-bold">Internship Hub</h4><p className="text-sm text-slate-500">Logbooks & Guides</p></div>
+</div>
+
+<div onClick={() => handleFolderClick('SOP')} className="...">
+  {/* This will find "06_Lab_SOPs" because it contains "SOP" */}
+  <BookOpen className="text-green-500 shrink-0" />
+  <div><h4 className="font-bold">Lab SOPs</h4><p className="text-sm text-slate-500">Standard Procedures</p></div>
+</div>
+
+<div onClick={() => handleFolderClick('Other')} className="...">
+  {/* This will find "08_Other-University_Resources" */}
+  <Search className="text-blue-500 shrink-0" />
+  <div><h4 className="font-bold">General Courses</h4><p className="text-sm text-slate-500">UHAS Requirements</p></div>
+</div>
               </div>
             </section>
           </>
