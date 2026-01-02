@@ -12,10 +12,10 @@ const GHABSAVault = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const levels = [
-    { id: '100', title: 'Level 100', courses: 'General Sciences, Math, Intro to BMB', color: 'from-green-600 to-green-800' },
-    { id: '200', title: 'Level 200', courses: 'Organic Chemistry, Genetics, Metabolism', color: 'from-green-500 to-green-700' },
+    { id: '100', title: 'Level 100', courses: 'Comm. Skills, Quant. Lit., Intro to BMB', color: 'from-green-600 to-green-800' },
+    { id: '200', title: 'Level 200', courses: 'Dev. Biology, Genetics, Metabolism', color: 'from-green-500 to-green-700' },
     { id: '300', title: 'Level 300', courses: 'Molecular Biology, Cell Signaling, Enzymology', color: 'from-yellow-500 to-yellow-600' },
-    { id: '400', title: 'Level 400', courses: 'Clinical Biochem, Immunology, Research Methods', color: 'from-green-800 to-black' },
+    { id: '400', title: 'Level 400', courses: 'Clinical Biochem, Entrepreneurship, Research Methods', color: 'from-green-800 to-black' },
   ];
 
   const handleFolderClick = async (searchKey) => {
@@ -68,10 +68,18 @@ const GHABSAVault = () => {
             <span className="text-green-500 font-black text-sm tracking-widest hidden sm:block uppercase">Digital Vault</span>
           </div>
         <div className="flex items-center gap-4">
+          <a 
+            href="https://paystack.com/pay/your-link" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:flex items-center gap-2 text-rose-500 hover:text-rose-400 font-medium text-sm transition-colors"
+          >
+            <Heart size={16} /> Support the Vault
+          </a>
           <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-full hover:bg-slate-800 transition-colors">
             {darkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
-          <a href="https://forms.gle/your-link" target="_blank" rel="noopener noreferrer" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2 shadow-lg">
+          <a href="https://forms.gle/i5tn9MssBEtnqq7a6" target="_blank" rel="noopener noreferrer" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2 shadow-lg">
             <Upload size={16} /> Contribute
           </a>
         </div>
@@ -117,11 +125,11 @@ const GHABSAVault = () => {
                 </div>
                 <div onClick={() => handleFolderClick('SOP')} className={`p-6 rounded-2xl flex items-start gap-4 cursor-pointer transition-all ${darkMode ? 'bg-slate-900 hover:bg-slate-800' : 'bg-white shadow-sm hover:shadow-md'}`}>
                   <BookOpen className="text-green-500 shrink-0" />
-                  <div><h4 className="font-bold">Lab SOPs</h4><p className="text-sm text-slate-500">Standard Procedures</p></div>
+                  <div><h4 className="font-bold">Lab SOPs</h4><p className="text-sm text-slate-500">Standard Laboratory Protocols/p></div>
                 </div>
                 <div onClick={() => handleFolderClick('Other')} className={`p-6 rounded-2xl flex items-start gap-4 cursor-pointer transition-all ${darkMode ? 'bg-slate-900 hover:bg-slate-800' : 'bg-white shadow-sm hover:shadow-md'}`}>
                   <Search className="text-blue-500 shrink-0" />
-                  <div><h4 className="font-bold">General Courses</h4><p className="text-sm text-slate-500">UHAS Requirements</p></div>
+                  <div><h4 className="font-bold">Other University Resources</h4><p className="text-sm text-slate-500">UHAS and SRC Resources</p></div>
                 </div>
               </div>
             </section>
@@ -158,6 +166,18 @@ const GHABSAVault = () => {
           </div>
         )}
       </main>
+      <footer className="max-w-7xl mx-auto px-6 py-12 mt-20 border-t border-white/5">
+        <div className="flex flex-col md:flex-row justify-between items-center text-slate-500 text-sm gap-4">
+          <div className="text-center md:text-left">
+            <p className="font-semibold text-slate-400">GHABSA-UHAS Digital Vault</p>
+            <p>© 2026. Built for the BMB Community.</p>
+          </div>
+          <div className="flex gap-6">
+            <a href="ghabsa.uhas.repo@gmail.com" className="hover:text-green-500 transition-colors">Report an Issue</a>
+            <a href="https://forms.gle/tBZmeg1xiazwW5pB8" target="_blank" className="hover:text-green-500 transition-colors">Suggestions</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
