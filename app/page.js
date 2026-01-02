@@ -91,7 +91,7 @@ const GHABSAVault = () => {
 
       <header className="max-w-7xl mx-auto px-6 py-12 text-center">
         <h1 className="text-4xl md:text-6xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-yellow-500">
-          {currentFolder ? `${currentFolder} Shelf` : 'Health for Development.'}
+          {currentFolder ? (levels.find(l => l.id === currentFolder)?.title + " Resources" || `${currentFolder} Repository`) : 'Health Research, Our Focus.'}
         </h1>
         <div className="relative max-w-xl mx-auto mt-8">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={20} />
@@ -99,7 +99,7 @@ const GHABSAVault = () => {
             type="text" 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search resources..."
+            placeholder="Search Course Codes (e.g. MBMB 301)..."
             className={`w-full py-4 pl-12 pr-4 rounded-2xl border-none focus:ring-2 focus:ring-green-500 shadow-xl ${darkMode ? 'bg-slate-900 text-white' : 'bg-white text-black'}`}
           />
         </div>
