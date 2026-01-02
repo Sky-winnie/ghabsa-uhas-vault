@@ -75,6 +75,7 @@ const GHABSAVault = () => {
             <Upload size={16} /> Contribute
           </a>
         </div>
+        </div>
       </nav>
 
       <header className="max-w-7xl mx-auto px-6 py-12 text-center">
