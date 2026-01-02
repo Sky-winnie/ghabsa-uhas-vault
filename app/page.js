@@ -52,7 +52,7 @@ const GHABSAVault = () => {
   return (
     <div className={`${darkMode ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900'} min-h-screen font-sans transition-colors duration-300`}>
       <nav className="flex items-center justify-between p-6 max-w-7xl mx-auto backdrop-blur-md sticky top-0 z-50">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {currentFolder && (
             <button onClick={() => {setCurrentFolder(null); setFiles([]);}} className="mr-2 p-2 hover:bg-white/10 rounded-full transition-colors">
               <ArrowLeft size={20} />
@@ -60,12 +60,13 @@ const GHABSAVault = () => {
           )}
           <img 
             src="/logo.png" 
-            alt="GHABSA Crest" 
-            className="w-12 h-12 object-contain" 
+            alt="GHABSA-UHAS Crest" 
+            className="w-12 h-12 rounded-full border-2 border-green-500 shadow-sm" 
           />
-          <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center font-bold text-white shadow-lg">BMB</div>
-          <span className="font-bold text-xl tracking-tight hidden sm:block uppercase">GHABSA-UHAS <span className="text-green-500">Digital Vault</span></span>
-        </div>
+          <div className="flex flex-col">
+            <span className="font-bold text-lg leading-none tracking-tight hidden sm:block">GHABSA-UHAS</span>
+            <span className="text-green-500 font-black text-sm tracking-widest hidden sm:block uppercase">Digital Vault</span>
+          </div>
         <div className="flex items-center gap-4">
           <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-full hover:bg-slate-800 transition-colors">
             {darkMode ? <Sun size={20} /> : <Moon size={20} />}
