@@ -2,7 +2,7 @@
 
 import './globals.css';
 import React, { useState } from 'react';
-import { Search, Moon, Sun, Folder, BookOpen, Microscope, Award, Upload, ArrowLeft, FileText, Loader2, ExternalLink, FileJson, FileCode, Clock } from 'lucide-react';
+import { Search, Moon, Sun, Folder, BookOpen, Microscope, Award, Upload, ArrowLeft, FileText, Loader2, ExternalLink, FileJson, FileCode, Clock, Heart } from 'lucide-react';
 
 const GHABSAVault = () => {
   const [darkMode, setDarkMode] = useState(true);
