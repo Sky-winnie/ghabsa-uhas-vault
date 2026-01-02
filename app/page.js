@@ -12,18 +12,27 @@ const GHABSAVault = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const levels = [
-    { id: '100', title: 'Level 100', courses: 'Comm. Skills, Quant. Lit., Intro to BMB', color: 'from-green-600 to-green-800' },
-    { id: '200', title: 'Level 200', courses: 'Dev. Biology, Genetics, Metabolism', color: 'from-green-500 to-green-700' },
-    { id: '300', title: 'Level 300', courses: 'Molecular Biology, Cell Signaling, Enzymology', color: 'from-yellow-500 to-yellow-600' },
-    { id: '400', title: 'Level 400', courses: 'Clinical Biochem, Entrepreneurship, Research Methods', color: 'from-green-800 to-black' },
+    { id: '100', title: 'Level 100', driveId: '1AqMF-am4QCzI4aBjuCbMaRv9o6ZNMNjF', courses: 'Comm. Skills, Quant. Lit., Intro to BMB', color: 'from-green-600 to-green-800' },
+    { id: '200', title: 'Level 200', driveId: '1AqMF-am4QCzI4aBjuCbMaRv9o6ZNMNjF', courses: 'Dev. Biology, Genetics, Metabolism', color: 'from-green-500 to-green-700' },
+    { id: '300', title: 'Level 300', driveId: '1r6UAb1ttH0mcFkiwEokvt8Kc7MffliKL', courses: 'Molecular Biology, Cell Signaling, Enzymology', color: 'from-yellow-500 to-yellow-600' },
+    { id: '400', title: 'Level 400', driveId: '1OSIIEf_GlshAeLgx9VKO-vyi_swkSkFt', courses: 'Clinical Biochem, Entrepreneurship, Research Methods', color: 'from-green-800 to-black' },
   ];
 
-  const handleFolderClick = async (searchKey) => {
-    setCurrentFolder(searchKey);
+  const handleFolderClick = async (levelId) => {
+    const selected = levels.find(l => l.id === levelId);
+    // Specialist mapping for links not in the levels array
+    const specialistIds = {
+      'Internship': '1sjYlfLYDHUvscITlo4Bq0MQJL29BlvXv',
+      'SOP': '1wRtREstUc0lbYUQfIJxrwKCYhbR06iP_',
+      'Other': '1VAc81kwh32KkDzU7G_jocWl5DmHGhnT1'
+    };
+    const targetId = selected ? selected.driveId : specialistIds[levelId];
+
+    setCurrentFolder(levelId); 
     setLoading(true);
-    setFiles([]); 
+    setFiles([]);
     try {
-      const response = await fetch(`/api/drive?folderName=${encodeURIComponent(searchKey)}`);
+      const response = await fetch(`/api/drive?folderId=${targetId}`);
       const data = await response.json();
       setFiles(Array.isArray(data) ? data : []);
     } catch (err) {
