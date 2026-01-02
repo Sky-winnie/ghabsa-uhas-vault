@@ -5,15 +5,19 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const folderId = searchParams.get('folderId');
 
-  // DEBUG LOGS - Check these in Vercel "Logs" tab
-  console.log("Attempting to fetch Folder ID:", folderId);
+  if (!folderId) return NextResponse.json([]);
 
   try {
+    // Robust Key Formatting: Handles quotes, escaped newlines, and literal newlines
+    const rawKey = process.env.GOOGLE_PRIVATE_KEY || "";
+    const formattedKey = rawKey
+      .replace(/^["']|["']$/g, '') // Remove accidental surrounding quotes
+      .replace(/\\n/g, '\n');      // Convert escaped \n to real newlines
+
     const auth = new google.auth.GoogleAuth({
       credentials: {
         client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        // Improved replacement logic to catch Vercel-specific escapes
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.split(RegExp('\\\\n|\\n')).join('\n'),
+        private_key: formattedKey,
       },
       scopes: ['https://www.googleapis.com/auth/drive.readonly'],
     });
@@ -21,15 +25,15 @@ export async function GET(request) {
     const drive = google.drive({ version: 'v3', auth });
 
     const fileRes = await drive.files.list({
-      q: `'${folderId}' in parents and trashed = false`,
+      // Fetching directly from the ID provided by the frontend
+      q: `'${folderId}' in parents and trashed = false and mimeType != 'application/vnd.google-apps.folder'`,
       fields: 'files(id, name, webViewLink, mimeType, modifiedTime)',
       orderBy: 'name',
     });
 
-    console.log(`Found ${fileRes.data.files?.length || 0} files`);
     return NextResponse.json(fileRes.data.files || []);
   } catch (error) {
-    console.error("DRIVE API CRASH:", error.message);
+    console.error("Drive API Error:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
