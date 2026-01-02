@@ -133,7 +133,7 @@ const GHABSAVault = () => {
                 </div>
                 <div onClick={() => handleFolderClick('SOP')} className={`p-6 rounded-2xl flex items-start gap-4 cursor-pointer transition-all ${darkMode ? 'bg-slate-900 hover:bg-slate-800' : 'bg-white shadow-sm hover:shadow-md'}`}>
                   <BookOpen className="text-green-500 shrink-0" />
-                  <div><h4 className="font-bold">Lab SOPs</h4><p className="text-sm text-slate-500">Standard Laboratory Protocols/p></div>
+                  <div><h4 className="font-bold">Lab SOPs</h4><p className="text-sm text-slate-500">Standard Laboratory Protocols</p></div>
                 </div>
                 <div onClick={() => handleFolderClick('Other')} className={`p-6 rounded-2xl flex items-start gap-4 cursor-pointer transition-all ${darkMode ? 'bg-slate-900 hover:bg-slate-800' : 'bg-white shadow-sm hover:shadow-md'}`}>
                   <Search className="text-blue-500 shrink-0" />
