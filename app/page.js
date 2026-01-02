@@ -2,7 +2,11 @@
 
 import './globals.css';
 import React, { useState } from 'react';
-import { Search, Moon, Sun, Folder, BookOpen, Microscope, Award, Upload, ArrowLeft, FileText, Loader2, ExternalLink, FileJson, FileCode, Clock } from 'lucide-react';
+import { 
+  Search, Moon, Sun, Folder, BookOpen, Microscope, Award, 
+  Upload, ArrowLeft, FileText, Loader2, ExternalLink, 
+  FileJson, FileCode, Clock, Heart 
+} from 'lucide-react';
 
 const GHABSAVault = () => {
   const [darkMode, setDarkMode] = useState(true);
@@ -52,6 +56,7 @@ const GHABSAVault = () => {
   return (
     <div className={`${darkMode ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-900'} min-h-screen font-sans transition-colors duration-300`}>
       <nav className="flex items-center justify-between p-6 max-w-7xl mx-auto backdrop-blur-md sticky top-0 z-50">
+        {/* Logo and Branding (Left) */}
         <div className="flex items-center gap-3">
           {currentFolder && (
             <button onClick={() => {setCurrentFolder(null); setFiles([]);}} className="mr-2 p-2 hover:bg-white/10 rounded-full transition-colors">
@@ -67,28 +72,30 @@ const GHABSAVault = () => {
             <span className="font-bold text-lg leading-none tracking-tight hidden sm:block">GHABSA-UHAS</span>
             <span className="text-green-500 font-black text-sm tracking-widest hidden sm:block uppercase">Digital Vault</span>
           </div>
+        </div>
+
+        {/* Buttons and Toggles (Right) */}
         <div className="flex items-center gap-4">
           <a 
             href="https://paystack.com/pay/your-link" 
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:flex items-center gap-2 text-rose-500 hover:text-rose-400 font-medium text-sm transition-colors"
+            className="hidden md:flex items-center gap-2 text-rose-500 hover:text-rose-400 font-medium text-sm transition-colors"
           >
-            <Heart size={16} /> Support the Vault
+            <Heart size={16} /> Support
           </a>
-          <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-full hover:bg-slate-800 transition-colors">
+          <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-full hover:bg-white/10 transition-colors">
             {darkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
           <a href="https://forms.gle/i5tn9MssBEtnqq7a6" target="_blank" rel="noopener noreferrer" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2 shadow-lg">
             <Upload size={16} /> Contribute
           </a>
         </div>
-        </div>
       </nav>
 
       <header className="max-w-7xl mx-auto px-6 py-12 text-center">
         <h1 className="text-4xl md:text-6xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-yellow-500">
-          {currentFolder ? `${currentFolder} Shelf` : 'Health for Development.'}
+          {currentFolder ? `${currentFolder} Repository` : 'Health for Development.'}
         </h1>
         <div className="relative max-w-xl mx-auto mt-8">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={20} />
@@ -96,7 +103,7 @@ const GHABSAVault = () => {
             type="text" 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search resources..."
+            placeholder="Search academic resources..."
             className={`w-full py-4 pl-12 pr-4 rounded-2xl border-none focus:ring-2 focus:ring-green-500 shadow-xl ${darkMode ? 'bg-slate-900 text-white' : 'bg-white text-black'}`}
           />
         </div>
@@ -110,7 +117,8 @@ const GHABSAVault = () => {
                 <div key={level.id} onClick={() => handleFolderClick(level.id)} className={`group relative overflow-hidden rounded-3xl p-8 cursor-pointer transition-all hover:-translate-y-2 shadow-xl bg-gradient-to-br ${level.color}`}>
                    <Folder className="mb-4 text-white/80" size={32} />
                    <h3 className="text-2xl font-bold text-white mb-2">{level.title}</h3>
-                   <p className="text-white/70 text-sm">{level.courses}</p>
+                   <p className="text-white/90 text-xs mb-4 line-clamp-2">{level.desc}</p>
+                   <p className="text-white/70 text-[10px] uppercase tracking-wider font-bold">Includes: {level.courses}</p>
                    <span className="absolute top-0 right-0 p-4 opacity-10 text-8xl font-black text-white">{level.id}</span>
                 </div>
               ))}
@@ -139,7 +147,7 @@ const GHABSAVault = () => {
             {loading ? (
               <div className="flex flex-col items-center justify-center py-20 gap-4">
                 <Loader2 className="animate-spin text-green-500" size={40} />
-                <p className="text-slate-500">Unlocking the vault...</p>
+                <p className="text-slate-500">Unlocking the repository...</p>
               </div>
             ) : filteredItems.length > 0 ? (
               <div className="grid grid-cols-1 gap-4">
@@ -149,9 +157,16 @@ const GHABSAVault = () => {
                       {getFileIcon(file.mimeType)}
                       <div className="flex flex-col">
                         <span className="font-medium truncate max-w-[200px] md:max-w-xl">{file.name}</span>
-                        <span className="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                          <Clock size={12} /> Updated: {formatDate(file.modifiedTime)}
-                        </span>
+                        <div className="flex items-center gap-3 mt-1">
+                          <span className="text-[10px] text-slate-500 flex items-center gap-1">
+                            <Clock size={12} /> {formatDate(file.modifiedTime)}
+                          </span>
+                          {file.description && (
+                            <span className="text-[10px] bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full border border-green-500/30 font-semibold tracking-wide uppercase">
+                              Contributor: {file.description}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                     <ExternalLink size={18} className="opacity-0 group-hover:opacity-100 transition-all text-green-500" />
@@ -160,12 +175,13 @@ const GHABSAVault = () => {
               </div>
             ) : (
               <div className="text-center py-20">
-                <p className="text-slate-500">This shelf is empty. Be the first to contribute!</p>
+                <p className="text-slate-500">This repository is empty. Be the first to contribute!</p>
               </div>
             )}
           </div>
         )}
       </main>
+
       <footer className="max-w-7xl mx-auto px-6 py-12 mt-20 border-t border-white/5">
         <div className="flex flex-col md:flex-row justify-between items-center text-slate-500 text-sm gap-4">
           <div className="text-center md:text-left">
@@ -173,8 +189,8 @@ const GHABSAVault = () => {
             <p>© 2026. Built for the BMB Community.</p>
           </div>
           <div className="flex gap-6">
-            <a href="ghabsa.uhas.repo@gmail.com" className="hover:text-green-500 transition-colors">Report an Issue</a>
-            <a href="https://forms.gle/tBZmeg1xiazwW5pB8" target="_blank" className="hover:text-green-500 transition-colors">Suggestions</a>
+            <a href="mailto:ghabsa.uhas.repo@gmail.com" className="hover:text-green-500 transition-colors">Report an Issue</a>
+            <a href="https://forms.gle/tBZmeg1xiazwW5pB8" target="_blank" rel="noopener noreferrer" className="hover:text-green-500 transition-colors">Suggestions</a>
           </div>
         </div>
       </footer>
