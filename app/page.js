@@ -130,9 +130,10 @@ const GHABSAVault = () => {
       <main className="max-w-7xl mx-auto px-6 pb-20">
         {!currentFolder ? (
           <>
+            {/* Level Folders */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {filteredItems.map((level) => (
-                <div key={level.id} onClick={() => handleFolderClick(level.id)} className={`group relative overflow-hidden rounded-3xl p-8 cursor-pointer transition-all hover:-translate-y-2 shadow-xl bg-gradient-to-br ${level.color}`}>
+              {levels.map((level) => (
+                <div key={level.id} onClick={() => fetchFolderContent(null, level.title, true)} className={`group relative overflow-hidden rounded-3xl p-8 cursor-pointer transition-all hover:-translate-y-2 shadow-xl bg-gradient-to-br ${level.color}`}>
                    <Folder className="mb-4 text-white/80" size={32} />
                    <h3 className="text-2xl font-bold text-white mb-2">{level.title}</h3>
                    <p className="text-white/70 text-sm">{level.courses}</p>
