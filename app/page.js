@@ -2,7 +2,7 @@
 
 import './globals.css';
 import React, { useState, useEffect } from 'react';
-import { Search, Moon, Sun, Folder, BookOpen, Microscope, Award, Upload, ArrowLeft, FileText, Loader2, ExternalLink, FileJson, FileCode, Clock, Heart } from 'lucide-react';
+import { Search, Moon, Sun, Folder, BookOpen, Microscope, Award, Upload, ArrowLeft, FileText, Loader2, ExternalLink, FileJson, FileCode, Clock, Heart, Eraser } from 'lucide-react';
 
 const GHABSAVault = () => {
   const [darkMode, setDarkMode] = useState(true);
@@ -70,7 +70,7 @@ useEffect(() => {
     if (searchQuery.length > 2) {
       performGlobalSearch();
     }
-  }, 100);
+  }, 350);
 
   return () => clearTimeout(delayDebounceFn);
 }, [searchQuery]);
@@ -159,7 +159,7 @@ const performGlobalSearch = async () => {
             onClick={() => setSearchQuery("")}
             className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-green-500 transition-colors"
           >
-            <Clock size={18} className="rotate-45" /> {/* Using Clock rotated as a simple 'X' or use X icon */}
+            <Eraser size={18} className="rotate-0" /> 
           </button>
         )}
         </div>
