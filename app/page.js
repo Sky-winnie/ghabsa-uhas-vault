@@ -94,7 +94,7 @@ const GHABSAVault = () => {
           )}
           <img src="/logo.png" alt="Crest" className="w-12 h-12 rounded-full border-2 border-green-500 shadow-sm" />
           <div className="flex flex-col">
-            <span className="font-bold text-lg leading-none hidden sm:block">GHABSA-UHAS</span>
+            <span className="font-bold text-lg hidden sm:block uppercase">GHABSA-UHAS</span>
             <span className="text-green-500 font-black text-sm hidden sm:block uppercase">Digital Vault</span>
           </div>
         </div>
@@ -105,7 +105,7 @@ const GHABSAVault = () => {
             target="_blank"
             className="hidden md:flex items-center gap-2 text-rose-500 border border-rose-500/20 bg-rose-500/5 px-4 py-2 rounded-full text-sm font-semibold hover:bg-rose-500 hover:text-white transition-all"
           >
-            <Heart size={16} fill="currentColor" /> Support
+            <Heart size={16} /> Support
           </a>
           <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-full hover:bg-slate-800 transition-colors">
             {darkMode ? <Sun size={20} /> : <Moon size={20} />}
