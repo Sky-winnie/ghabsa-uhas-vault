@@ -72,7 +72,13 @@ const GHABSAVault = () => {
     if (mimeType === 'application/vnd.google-apps.folder') return <Folder className="text-yellow-500" size={24} />;
     if (mimeType?.includes('pdf')) return <FileText className="text-red-400" size={24} />;
     if (mimeType?.includes('word') || mimeType?.includes('document')) return <BookOpen className="text-blue-400" size={24} />;
+    if (mimeType?.includes('spreadsheet') || mimeType?.includes('excel')) return <FileJson className="text-green-400" size={24} />;
     return <FileCode className="text-slate-400" size={24} />;
+   };
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
   const filteredItems = currentFolder 
@@ -115,7 +121,7 @@ const GHABSAVault = () => {
             type="text" 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search resources..."
+            placeholder="Search Course Codes (e.g. MBMB 301)..."
             className={`w-full py-4 pl-12 pr-4 rounded-2xl border-none shadow-xl ${darkMode ? 'bg-slate-900 text-white' : 'bg-white text-black'}`}
           />
         </div>
@@ -123,49 +129,80 @@ const GHABSAVault = () => {
 
       <main className="max-w-7xl mx-auto px-6 pb-20">
         {!currentFolder ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredItems.map((level) => (
-              <div key={level.id} onClick={() => fetchFolderContent(null, level.title, true)} className={`group relative overflow-hidden rounded-3xl p-8 cursor-pointer transition-all hover:-translate-y-2 shadow-xl bg-gradient-to-br ${level.color}`}>
-                <Folder className="mb-4 text-white/80" size={32} />
-                <h3 className="text-2xl font-bold text-white mb-2">{level.title}</h3>
-                <p className="text-white/70 text-sm">{level.courses}</p>
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {filteredItems.map((level) => (
+                <div key={level.id} onClick={() => handleFolderClick(level.id)} className={`group relative overflow-hidden rounded-3xl p-8 cursor-pointer transition-all hover:-translate-y-2 shadow-xl bg-gradient-to-br ${level.color}`}>
+                   <Folder className="mb-4 text-white/80" size={32} />
+                   <h3 className="text-2xl font-bold text-white mb-2">{level.title}</h3>
+                   <p className="text-white/70 text-sm">{level.courses}</p>
+                   <span className="absolute top-0 right-0 p-4 opacity-10 text-8xl font-black text-white">{level.id}</span>
+                </div>
+              ))}
+            </div>
+
+            <section className="mt-16 border-t border-white/5 pt-16">
+              <h2 className="text-2xl font-bold mb-8 flex items-center gap-2"><Microscope className="text-green-500" /> Specialist Resources</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div onClick={() => handleFolderClick('Internship')} className={`p-6 rounded-2xl flex items-start gap-4 cursor-pointer transition-all ${darkMode ? 'bg-slate-900 hover:bg-slate-800' : 'bg-white shadow-sm hover:shadow-md'}`}>
+                  <Award className="text-yellow-500 shrink-0" />
+                  <div><h4 className="font-bold">Internship Hub</h4><p className="text-sm text-slate-500">Logbooks & Guides</p></div>
+                </div>
+                <div onClick={() => handleFolderClick('SOP')} className={`p-6 rounded-2xl flex items-start gap-4 cursor-pointer transition-all ${darkMode ? 'bg-slate-900 hover:bg-slate-800' : 'bg-white shadow-sm hover:shadow-md'}`}>
+                  <BookOpen className="text-green-500 shrink-0" />
+                  <div><h4 className="font-bold">Lab SOPs</h4><p className="text-sm text-slate-500">Standard Laboratory Protocols</p></div>
+                </div>
+                <div onClick={() => handleFolderClick('Other')} className={`p-6 rounded-2xl flex items-start gap-4 cursor-pointer transition-all ${darkMode ? 'bg-slate-900 hover:bg-slate-800' : 'bg-white shadow-sm hover:shadow-md'}`}>
+                  <Search className="text-blue-500 shrink-0" />
+                  <div><h4 className="font-bold">Other University Resources</h4><p className="text-sm text-slate-500">UHAS and SRC Resources</p></div>
+                </div>
               </div>
-            ))}
-          </div>
+            </section>
+          </>
         ) : (
           <div className="bg-white/5 rounded-3xl p-8 border border-white/10 min-h-[400px]">
             {loading ? (
               <div className="flex flex-col items-center justify-center py-20 gap-4">
                 <Loader2 className="animate-spin text-green-500" size={40} />
-                <p className="text-slate-500">Opening folder...</p>
+                <p className="text-slate-500">Unlocking the vault...</p>
               </div>
             ) : filteredItems.length > 0 ? (
               <div className="grid grid-cols-1 gap-4">
-                {filteredItems.map((item) => (
-                  <button 
-                    key={item.id} 
-                    onClick={() => handleItemClick(item)}
-                    className="flex items-center justify-between p-5 bg-white/5 rounded-2xl hover:bg-green-500/10 border border-white/10 transition-all text-left w-full group"
-                  >
+                {filteredItems.map((file) => (
+                  <a key={file.id} href={file.webViewLink} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-5 bg-white/5 rounded-2xl hover:bg-green-500/10 border border-white/10 hover:border-green-500/50 transition-all group">
                     <div className="flex items-center gap-4">
-                      {getFileIcon(item.mimeType)}
+                      {getFileIcon(file.mimeType)}
                       <div className="flex flex-col">
-                        <span className="font-medium truncate max-w-[200px] md:max-w-xl">{item.name}</span>
-                        {item.mimeType !== 'application/vnd.google-apps.folder' && (
-                           <span className="text-xs text-slate-500 mt-1">File</span>
-                        )}
+                        <span className="font-medium truncate max-w-[200px] md:max-w-xl">{file.name}</span>
+                        <span className="text-xs text-slate-500 flex items-center gap-1 mt-1">
+                          <Clock size={12} /> Updated: {formatDate(file.modifiedTime)}
+                        </span>
                       </div>
                     </div>
-                    <ExternalLink size={18} className="opacity-0 group-hover:opacity-100 text-green-500" />
-                  </button>
+                    <ExternalLink size={18} className="opacity-0 group-hover:opacity-100 transition-all text-green-500" />
+                  </a>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-20 text-slate-500">This folder is empty.</div>
+              <div className="text-center py-20">
+                <p className="text-slate-500">This shelf is empty. Be the first to contribute!</p>
+              </div>
             )}
           </div>
         )}
       </main>
+      <footer className="max-w-7xl mx-auto px-6 py-12 mt-20 border-t border-white/5">
+        <div className="flex flex-col md:flex-row justify-between items-center text-slate-500 text-sm gap-4">
+          <div className="text-center md:text-left">
+            <p className="font-semibold text-slate-400">GHABSA-UHAS Digital Vault</p>
+            <p>© 2026. Built for the BMB Community.</p>
+          </div>
+          <div className="flex gap-6">
+            <a href="mailto:ghabsa.uhas.repo@gmail.com" className="hover:text-green-500 transition-colors">Report an Issue</a>
+            <a href="https://forms.gle/tBZmeg1xiazwW5pB8" target="_blank" className="hover:text-green-500 transition-colors">Suggestions</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
