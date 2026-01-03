@@ -5,6 +5,7 @@ export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const folderId = searchParams.get('folderId');
   const folderName = searchParams.get('folderName');
+  const globalQuery = searchParams.get('q'); // New Global Search Param
 
   const auth = new google.auth.GoogleAuth({
     credentials: {
@@ -17,9 +18,19 @@ export async function GET(request) {
   const drive = google.drive({ version: 'v3', auth });
 
   try {
-    let targetFolderId = folderId;
+    // GLOBAL SEARCH LOGIC
+    if (globalQuery) {
+      const res = await drive.files.list({
+        q: `name contains '${globalQuery}' and trashed = false and '${process.env.GOOGLE_DRIVE_FOLDER_ID}' in parents`, 
+        // Note: For true deep search across all subfolders, we use 'tranportability' logic or simply:
+        q: `name contains '${globalQuery}' and trashed = false`, 
+        fields: 'files(id, name, webViewLink, mimeType, modifiedTime)',
+      });
+      return NextResponse.json(res.data.files || []);
+    }
 
-    // If we only have a name (like for the initial Level click), find its ID first
+    // NORMAL NAVIGATION LOGIC
+    let targetFolderId = folderId;
     if (!targetFolderId && folderName) {
       const folderRes = await drive.files.list({
         q: `mimeType = 'application/vnd.google-apps.folder' and '${process.env.GOOGLE_DRIVE_FOLDER_ID}' in parents and name contains '${folderName}' and trashed = false`,
@@ -30,16 +41,14 @@ export async function GET(request) {
 
     if (!targetFolderId) return NextResponse.json([]);
 
-    // Fetch BOTH files and subfolders
     const res = await drive.files.list({
       q: `'${targetFolderId}' in parents and trashed = false`,
       fields: 'files(id, name, webViewLink, mimeType, modifiedTime)',
-      orderBy: 'folder, name', // Folders first, then alphabetical
+      orderBy: 'folder, name',
     });
 
     return NextResponse.json(res.data.files || []);
   } catch (error) {
-    console.error("Drive API Error:", error.message);
-    return NextResponse.json([], { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
