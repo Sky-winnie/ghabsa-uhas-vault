@@ -70,7 +70,7 @@ useEffect(() => {
     if (searchQuery.length > 2) {
       performGlobalSearch();
     }
-  }, 500); // Wait 500ms after typing stops
+  }, 100);
 
   return () => clearTimeout(delayDebounceFn);
 }, [searchQuery]);
