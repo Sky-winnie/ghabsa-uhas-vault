@@ -1,7 +1,7 @@
 "use client";
 
 import './globals.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Search, Moon, Sun, Folder, BookOpen, Microscope, Award, Upload, ArrowLeft, FileText, Loader2, ExternalLink, FileJson, FileCode, Clock, Heart } from 'lucide-react';
 
 const GHABSAVault = () => {
@@ -10,10 +10,10 @@ const GHABSAVault = () => {
   const [searchQuery, setSearchQuery] = useState("");
   
   // Navigation State
-  const [currentFolder, setCurrentFolder] = useState(null); // The ID of the current folder
-  const [folderTitle, setFolderTitle] = useState(""); // The display name
+  const [currentFolder, setCurrentFolder] = useState(null); 
+  const [folderTitle, setFolderTitle] = useState(""); 
   const [files, setFiles] = useState([]);
-  const [history, setHistory] = useState([]); // To track breadcrumbs for going back
+  const [history, setHistory] = useState([]); 
 
   const levels = [
     { id: '100', title: 'Level 100', courses: 'Comm. Skills, Quant. Lit., Intro to BMB', color: 'from-green-600 to-green-800' },
@@ -22,10 +22,10 @@ const GHABSAVault = () => {
     { id: '400', title: 'Level 400', courses: 'Clinical Biochem, Entrepreneurship, Research Methods', color: 'from-green-800 to-black' },
   ];
 
+  // Modified to handle both Level names and Specialist names
   const fetchFolderContent = async (id, name, isInitial = false) => {
     setLoading(true);
     try {
-      // Use name for top-level search, ID for subfolders
       const url = isInitial 
         ? `/api/drive?folderName=${encodeURIComponent(name)}` 
         : `/api/drive?folderId=${id}`;
@@ -34,7 +34,7 @@ const GHABSAVault = () => {
       const data = await response.json();
       
       setFiles(data);
-      setCurrentFolder(id || "root"); // fallback to avoid null
+      setCurrentFolder(id || "root"); 
       setFolderTitle(name);
     } catch (err) {
       console.error(err);
@@ -43,13 +43,12 @@ const GHABSAVault = () => {
     }
   };
 
+  // Logic to decide whether to open a link or browse deeper
   const handleItemClick = (item) => {
     if (item.mimeType === 'application/vnd.google-apps.folder') {
-      // It's a folder: Navigate deeper
       setHistory([...history, { id: currentFolder, title: folderTitle, files: files }]);
       fetchFolderContent(item.id, item.name);
     } else {
-      // It's a file: Open it
       window.open(item.webViewLink, '_blank');
     }
   };
@@ -61,8 +60,7 @@ const GHABSAVault = () => {
       return;
     }
     const previous = history[history.length - 1];
-    const newHistory = history.slice(0, -1);
-    setHistory(newHistory);
+    setHistory(history.slice(0, -1));
     setFiles(previous.files);
     setCurrentFolder(previous.id);
     setFolderTitle(previous.title);
@@ -74,7 +72,7 @@ const GHABSAVault = () => {
     if (mimeType?.includes('word') || mimeType?.includes('document')) return <BookOpen className="text-blue-400" size={24} />;
     if (mimeType?.includes('spreadsheet') || mimeType?.includes('excel')) return <FileJson className="text-green-400" size={24} />;
     return <FileCode className="text-slate-400" size={24} />;
-   };
+  };
 
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
@@ -112,7 +110,7 @@ const GHABSAVault = () => {
       </nav>
 
       <header className="max-w-7xl mx-auto px-6 py-12 text-center">
-        <h1 className="text-4xl md:text-6xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-yellow-500">
+        <h1 className="text-4xl md:text-6xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-yellow-500 uppercase">
           {currentFolder ? `${folderTitle} Resources` : 'Health Research, Our Focus.'}
         </h1>
         <div className="relative max-w-xl mx-auto mt-8">
@@ -130,7 +128,6 @@ const GHABSAVault = () => {
       <main className="max-w-7xl mx-auto px-6 pb-20">
         {!currentFolder ? (
           <>
-            {/* Level Folders */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {levels.map((level) => (
                 <div key={level.id} onClick={() => fetchFolderContent(null, level.title, true)} className={`group relative overflow-hidden rounded-3xl p-8 cursor-pointer transition-all hover:-translate-y-2 shadow-xl bg-gradient-to-br ${level.color}`}>
@@ -145,15 +142,15 @@ const GHABSAVault = () => {
             <section className="mt-16 border-t border-white/5 pt-16">
               <h2 className="text-2xl font-bold mb-8 flex items-center gap-2"><Microscope className="text-green-500" /> Specialist Resources</h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                <div onClick={() => handleFolderClick('Internship')} className={`p-6 rounded-2xl flex items-start gap-4 cursor-pointer transition-all ${darkMode ? 'bg-slate-900 hover:bg-slate-800' : 'bg-white shadow-sm hover:shadow-md'}`}>
+                <div onClick={() => fetchFolderContent(null, 'Internship', true)} className={`p-6 rounded-2xl flex items-start gap-4 cursor-pointer transition-all ${darkMode ? 'bg-slate-900 hover:bg-slate-800' : 'bg-white shadow-sm hover:shadow-md'}`}>
                   <Award className="text-yellow-500 shrink-0" />
                   <div><h4 className="font-bold">Internship Hub</h4><p className="text-sm text-slate-500">Logbooks & Guides</p></div>
                 </div>
-                <div onClick={() => handleFolderClick('SOP')} className={`p-6 rounded-2xl flex items-start gap-4 cursor-pointer transition-all ${darkMode ? 'bg-slate-900 hover:bg-slate-800' : 'bg-white shadow-sm hover:shadow-md'}`}>
+                <div onClick={() => fetchFolderContent(null, 'SOP', true)} className={`p-6 rounded-2xl flex items-start gap-4 cursor-pointer transition-all ${darkMode ? 'bg-slate-900 hover:bg-slate-800' : 'bg-white shadow-sm hover:shadow-md'}`}>
                   <BookOpen className="text-green-500 shrink-0" />
                   <div><h4 className="font-bold">Lab SOPs</h4><p className="text-sm text-slate-500">Standard Laboratory Protocols</p></div>
                 </div>
-                <div onClick={() => handleFolderClick('Other')} className={`p-6 rounded-2xl flex items-start gap-4 cursor-pointer transition-all ${darkMode ? 'bg-slate-900 hover:bg-slate-800' : 'bg-white shadow-sm hover:shadow-md'}`}>
+                <div onClick={() => fetchFolderContent(null, 'Other', true)} className={`p-6 rounded-2xl flex items-start gap-4 cursor-pointer transition-all ${darkMode ? 'bg-slate-900 hover:bg-slate-800' : 'bg-white shadow-sm hover:shadow-md'}`}>
                   <Search className="text-blue-500 shrink-0" />
                   <div><h4 className="font-bold">Other University Resources</h4><p className="text-sm text-slate-500">UHAS and SRC Resources</p></div>
                 </div>
@@ -169,19 +166,19 @@ const GHABSAVault = () => {
               </div>
             ) : filteredItems.length > 0 ? (
               <div className="grid grid-cols-1 gap-4">
-                {filteredItems.map((file) => (
-                  <a key={file.id} href={file.webViewLink} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-5 bg-white/5 rounded-2xl hover:bg-green-500/10 border border-white/10 hover:border-green-500/50 transition-all group">
+                {filteredItems.map((item) => (
+                  <div key={item.id} onClick={() => handleItemClick(item)} className="flex items-center justify-between p-5 bg-white/5 rounded-2xl hover:bg-green-500/10 border border-white/10 hover:border-green-500/50 transition-all group cursor-pointer">
                     <div className="flex items-center gap-4">
-                      {getFileIcon(file.mimeType)}
+                      {getFileIcon(item.mimeType)}
                       <div className="flex flex-col">
-                        <span className="font-medium truncate max-w-[200px] md:max-w-xl">{file.name}</span>
+                        <span className="font-medium truncate max-w-[200px] md:max-w-xl text-left">{item.name}</span>
                         <span className="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                          <Clock size={12} /> Updated: {formatDate(file.modifiedTime)}
+                          <Clock size={12} /> {item.mimeType === 'application/vnd.google-apps.folder' ? 'Folder' : `Updated: ${formatDate(item.modifiedTime)}`}
                         </span>
                       </div>
                     </div>
                     <ExternalLink size={18} className="opacity-0 group-hover:opacity-100 transition-all text-green-500" />
-                  </a>
+                  </div>
                 ))}
               </div>
             ) : (
@@ -192,6 +189,7 @@ const GHABSAVault = () => {
           </div>
         )}
       </main>
+
       <footer className="max-w-7xl mx-auto px-6 py-12 mt-20 border-t border-white/5">
         <div className="flex flex-col md:flex-row justify-between items-center text-slate-500 text-sm gap-4">
           <div className="text-center md:text-left">
