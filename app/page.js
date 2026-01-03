@@ -100,6 +100,13 @@ const GHABSAVault = () => {
         </div>
 
         <div className="flex items-center gap-4">
+          <a 
+            href="https://paystack.com/pay/your-link" // You can set up a Paystack/Momo link
+            target="_blank"
+            className="hidden md:flex items-center gap-2 text-rose-500 border border-rose-500/20 bg-rose-500/5 px-4 py-2 rounded-full text-sm font-semibold hover:bg-rose-500 hover:text-white transition-all"
+          >
+            <Heart size={16} fill="currentColor" /> Support
+          </a>
           <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-full hover:bg-slate-800 transition-colors">
             {darkMode ? <Sun size={20} /> : <Moon size={20} />}
           </button>
