@@ -3,7 +3,8 @@ import { NextResponse } from 'next/server';
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const folderName = searchParams.get('folderName'); 
+  const folderId = searchParams.get('folderId');
+  const folderName = searchParams.get('folderName');
 
   const auth = new google.auth.GoogleAuth({
     credentials: {
@@ -16,23 +17,27 @@ export async function GET(request) {
   const drive = google.drive({ version: 'v3', auth });
 
   try {
-    // 1. Search for the sub-folder within your Root
-    let folderQuery = `mimeType = 'application/vnd.google-apps.folder' and '${process.env.GOOGLE_DRIVE_FOLDER_ID}' in parents and name contains '${folderName}' and trashed = false`;
-    
-    const folderRes = await drive.files.list({ q: folderQuery, fields: 'files(id, name)' });
-    const folders = folderRes.data.files || [];
+    let targetFolderId = folderId;
 
-    if (folders.length > 0) {
-      // 2. Fetch files from the FIRST matching folder found
-      const fileRes = await drive.files.list({
-        q: `'${folders[0].id}' in parents and trashed = false and mimeType != 'application/vnd.google-apps.folder'`,
-        fields: 'files(id, name, webViewLink, mimeType, modifiedTime)',
-        orderBy: 'name',
+    // If we only have a name (like for the initial Level click), find its ID first
+    if (!targetFolderId && folderName) {
+      const folderRes = await drive.files.list({
+        q: `mimeType = 'application/vnd.google-apps.folder' and '${process.env.GOOGLE_DRIVE_FOLDER_ID}' in parents and name contains '${folderName}' and trashed = false`,
+        fields: 'files(id)',
       });
-      return NextResponse.json(fileRes.data.files || []);
+      targetFolderId = folderRes.data.files[0]?.id;
     }
 
-    return NextResponse.json([]); 
+    if (!targetFolderId) return NextResponse.json([]);
+
+    // Fetch BOTH files and subfolders
+    const res = await drive.files.list({
+      q: `'${targetFolderId}' in parents and trashed = false`,
+      fields: 'files(id, name, webViewLink, mimeType, modifiedTime)',
+      orderBy: 'folder, name', // Folders first, then alphabetical
+    });
+
+    return NextResponse.json(res.data.files || []);
   } catch (error) {
     console.error("Drive API Error:", error.message);
     return NextResponse.json([], { status: 500 });
