@@ -118,7 +118,7 @@ const GHABSAVault = () => {
       </nav>
 
       <header className="max-w-7xl mx-auto px-6 py-12 text-center">
-        <h1 className="text-4xl md:text-6xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-yellow-500 uppercase">
+        <h1 className="text-4xl md:text-6xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-yellow-500">
           {currentFolder ? `${folderTitle} Resources` : 'Health Research, Our Focus.'}
         </h1>
         <div className="relative max-w-xl mx-auto mt-8">
