@@ -1,7 +1,7 @@
 "use client";
 
 import './globals.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Moon, Sun, Folder, BookOpen, Microscope, Award, Upload, ArrowLeft, FileText, Loader2, ExternalLink, FileJson, FileCode, Clock, Heart } from 'lucide-react';
 
 const GHABSAVault = () => {
@@ -86,7 +86,7 @@ const performGlobalSearch = async () => {
   } catch (err) {
     console.error(err);
   } finally {
-    setLoading(true);
+    setLoading(false);
   }
 };
   
