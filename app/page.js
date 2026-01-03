@@ -94,8 +94,8 @@ const GHABSAVault = () => {
           )}
           <img src="/logo.png" alt="Crest" className="w-12 h-12 rounded-full border-2 border-green-500 shadow-sm" />
           <div className="flex flex-col">
-            <span className="font-bold text-lg hidden sm:block uppercase">GHABSA-UHAS</span>
-            <span className="text-green-500 font-black text-sm hidden sm:block uppercase">Digital Vault</span>
+            <span className="font-bold text-lg leading-none tracking-tight hidden sm:block">GHABSA-UHAS</span>
+            <span className="text-green-500 font-black text-sm tracking-widest hidden sm:block uppercase">Digital Vault</span>
           </div>
         </div>
 
@@ -103,7 +103,8 @@ const GHABSAVault = () => {
           <a 
             href="https://paystack.com/pay/your-link" // You can set up a Paystack/Momo link
             target="_blank"
-            className="hidden md:flex items-center gap-2 text-rose-500 border border-rose-500/20 bg-rose-500/5 px-4 py-2 rounded-full text-sm font-semibold hover:bg-rose-500 hover:text-white transition-all"
+            rel="noopener noreferrer"
+            className="hidden md:flex items-center gap-2 text-rose-500 hover:text-rose-400 font-medium text-sm transition-colors"
           >
             <Heart size={16} /> Support
           </a>
