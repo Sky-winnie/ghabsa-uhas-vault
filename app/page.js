@@ -65,7 +65,31 @@ const GHABSAVault = () => {
     setCurrentFolder(previous.id);
     setFolderTitle(previous.title);
   };
+useEffect(() => {
+  const delayDebounceFn = setTimeout(() => {
+    if (searchQuery.length > 2) {
+      performGlobalSearch();
+    }
+  }, 500); // Wait 500ms after typing stops
 
+  return () => clearTimeout(delayDebounceFn);
+}, [searchQuery]);
+
+const performGlobalSearch = async () => {
+  setLoading(true);
+  try {
+    const response = await fetch(`/api/drive?q=${encodeURIComponent(searchQuery)}`);
+    const data = await response.json();
+    setFiles(data);
+    setCurrentFolder("search-results");
+    setFolderTitle(`Results for "${searchQuery}"`);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoading(true);
+  }
+};
+  
   const getFileIcon = (mimeType) => {
     if (mimeType === 'application/vnd.google-apps.folder') return <Folder className="text-yellow-500" size={24} />;
     if (mimeType?.includes('pdf')) return <FileText className="text-red-400" size={24} />;
@@ -128,8 +152,16 @@ const GHABSAVault = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search Course Codes (e.g. MBMB 301)..."
-            className={`w-full py-4 pl-12 pr-4 rounded-2xl border-none shadow-xl ${darkMode ? 'bg-slate-900 text-white' : 'bg-white text-black'}`}
+            className={`w-full py-4 pl-12 pr-4 rounded-2xl border-none focus:ring-green-500 shadow-xl ${darkMode ? 'bg-slate-900 text-white' : 'bg-white text-black'}`}
           />
+            {searchQuery && (
+          <button 
+            onClick={() => setSearchQuery("")}
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-green-500 transition-colors"
+          >
+            <Clock size={18} className="rotate-45" /> {/* Using Clock rotated as a simple 'X' or use X icon */}
+          </button>
+        )}
         </div>
       </header>
 
@@ -167,10 +199,33 @@ const GHABSAVault = () => {
           </>
         ) : (
           <div className="bg-white/5 rounded-3xl p-8 border border-white/10 min-h-[400px]">
+            <div className="flex items-center gap-2 mb-6 text-sm overflow-x-auto whitespace-nowrap pb-2">
+        <button onClick={() => {setCurrentFolder(null); setHistory([]); setSearchQuery("");}} className="text-slate-500 hover:text-green-500 transition-colors">Home</button>
+        {history.map((step, index) => (
+          <React.Fragment key={index}>
+            <span className="text-slate-700">/</span>
+            <button 
+              onClick={() => {
+                // Logic to jump back to this specific point in history
+                const targetHistory = history.slice(0, index);
+                setHistory(targetHistory);
+                setFiles(step.files);
+                setCurrentFolder(step.id);
+                setFolderTitle(step.title);
+              }}
+              className="text-slate-500 hover:text-green-500 transition-colors"
+            >
+              {step.title}
+            </button>
+          </React.Fragment>
+        ))}
+        <span className="text-slate-700">/</span>
+        <span className="text-green-500 font-medium">{folderTitle}</span>
+      </div>
             {loading ? (
               <div className="flex flex-col items-center justify-center py-20 gap-4">
                 <Loader2 className="animate-spin text-green-500" size={40} />
-                <p className="text-slate-500">Unlocking the vault...</p>
+                <p className="text-slate-500 animate-pulse">Unlocking the vault...</p>
               </div>
             ) : filteredItems.length > 0 ? (
               <div className="grid grid-cols-1 gap-4">
